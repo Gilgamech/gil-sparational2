@@ -305,7 +305,7 @@ app.get(/\S+/, function(request, response) {
 		$pagename = $requestPath + '.spa';
 		$pageSettingsJson = $siteBase + $requestPath + $pagename;
 	};//end if requestPath.indexOf
-   if($userName){
+   if(!!$userName){
 		$settingsVar.userACLTable = [];
 		for ($site in $aclTable.users[$userName].userSites) {$settingsVar.userACLTable += $site+","}
 	}// end if userName
