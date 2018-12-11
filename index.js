@@ -2,7 +2,7 @@
 // Comments are fundamental
 // aSecretToEverybody
 
-var $ver = 342
+var $ver = 343
 
 //{ Init vars
 var express = require('express');
@@ -252,7 +252,7 @@ function deleteAccount($userName) {
 
 function sendS3Url($userName,$siteName,$fileName,$callback,$contentType) {
 	if(!$fileName){
-		$fileName = $siteName + ".json"
+		$fileName = $siteName + ".spa"
 	};//end if fileName
 	if(!$contentType){
 		$contentType = "text/plain;charset=UTF-8"
