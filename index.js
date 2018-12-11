@@ -2,7 +2,7 @@
 // Comments are fundamental
 // aSecretToEverybody
 
-var $ver = 337
+var $ver = 338
 
 //{ Init vars
 var express = require('express');
@@ -305,7 +305,9 @@ app.get(/\S+/, function(request, response) {
 		$pagename = $requestPath + '.spa';
 		$pageSettingsJson = $siteBase + $requestPath + $pagename;
 	};//end if requestPath.indexOf
-   if($userName !== ""){
+   if($userName == ""){
+		$settingsVar.userACLTable = [];
+	}else{
 		$settingsVar.userACLTable = [];
 		for ($site in $aclTable.users[$userName].userSites) {$settingsVar.userACLTable += $site+","}
 	}// end if userName
