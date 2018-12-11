@@ -2,7 +2,7 @@
 // Comments are fundamental
 // aSecretToEverybody
 
-var $ver = 341
+var $ver = 342
 
 //{ Init vars
 var express = require('express');
@@ -310,7 +310,6 @@ app.get(/\S+/, function(request, response) {
 		for ($site in $aclTable.users[$userName].userSites) {$settingsVar.userACLTable += $site+","}
 	}else{
 		$settingsVar.userACLTable = [];
-		$settingsVar.userACLTable += "initsite,initsite2";
 	}// end if userName
 	$settingsVar.clientIP = request.ip;
 	$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY;
