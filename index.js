@@ -125,12 +125,12 @@ var lineBreak = "\r\n"
 var $basePrice = (Math.random()*10)
 var $rootPage = "root"
 var $publicBucket = "gilpublic";
-var $siteBase = "https://s3.amazonaws.com/" + $publicBucket
+var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
 
 $settingsVar.userName= "null";
 $settingsVar.deviceType= "null";
-$settingsVar.apiVersion= 334;
+$settingsVar.apiVersion= 335;
 $settingsVar.googleApiKey= process.env.GOOGLE_API_KEY || 'aSecretToEverybody';
 $settingsVar.aclTable= [];
 $settingsVar.chatGeneral= "";
@@ -328,6 +328,11 @@ app.post('/login', function(request, response) {
 					$settingsVar.clientIP = request.ip;
 					$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY;
 					response.json($settingsVar);
+
+					request.session.userName = "";
+					$settingsVar.userName = "";
+					$settingsVar.clientIP = "";
+					$settingsVar.googleApiKey= "";
 				})
 			} else {
 				addErr(("User password not match: " + $userName));
