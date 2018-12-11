@@ -4,6 +4,7 @@
 
 var $ver = 335
 
+//{ Init vars
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -129,7 +130,9 @@ var $rootPage = "root"
 var $publicBucket = "gilpublic";
 var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
+//}
 
+//{ settingsVar vars
 $settingsVar.userName= "null";
 $settingsVar.deviceType= "null";
 $settingsVar.apiVersion= $ver;
@@ -143,7 +146,9 @@ $settingsVar.clientIP= "";
 $settingsVar.fruitbotwin=0;
 $settingsVar.fruitbotloss=0;
 $settingsVar.fruitbottie=0;
+//}
 
+//{ app init
 app.use(cookieParser(process.env.PASSPORT_SECRET || 'aSecretToEverybody'));
 app.use(session());
 app.use(require('express-session')({
@@ -160,7 +165,9 @@ app.set('view engine', 'ejs');
 
 app.use(bodyParser.urlencoded({ extended: true }));// get information from html forms
 app.use(cookieParser());// read cookies (needed for auth)
+//}
 
+//{ Functions
 $s3.getSignedUrl('getObject', $urlPWHParams, function(err, url){
     addErr('the url is ' + url);
 });
@@ -278,7 +285,9 @@ function sendS3Url($userName,$siteName,$fileName,$callback,$contentType) {
 		$callback("Please login.");
 	}
 }
-// Page calls
+//}
+
+//{ Page calls
 app.get(/\S+/, function(request, response) {
 	//https://gil-api.herokuapp.com/?p=giltech
 	var $userName = request.session.userName;
@@ -306,7 +315,9 @@ app.get(/\S+/, function(request, response) {
 
 	response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + $siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + $siteBase + '/Gilgamech.js"></script><script>$settingsVar='+JSON.stringify($settingsVar)+'</script> ');
 });
+//}
 
+//{POST calls 
 app.post('/login', function(request, response) {
     var $userName = request.query.username;
     var $enteredPassword = request.query.password;
@@ -458,8 +469,9 @@ app.post('/test', function(req, res){
       res.send("Welcome to this page for the first time, "+req.session.userName+"!");
    }
 });
+//}
 
-// Error capture
+//{ Error capture
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     res.status(err.status || 404);
@@ -475,6 +487,7 @@ app.use(function(req, res, next) {
     res.send('error: '+ err.message)
 	next(err);
 });
+//}
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
