@@ -2,9 +2,9 @@
 // Comments are fundamental
 // aSecretToEverybody
 
-var $ver = 343
-
 //{ Init vars
+var $ver = 343
+var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -17,7 +17,6 @@ const { Client } = require('pg');
 var Sequelize = require('sequelize');
 var pg = require('pg').native;
 var pghstore = require('pg-hstore');
-var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
 
 var app = express();
 var User = sequelize.import('./User');
@@ -60,20 +59,19 @@ try {
 });// end s3 getObject
 
 $settingsVar = {
-    userName: "Login",
+    apiVersion: $ver, 
     deviceType: "null",
-    apiVersion: 331, 
-    googleApiKey: process.env.GOOGLE_API_KEY || 'aSecretToEverybody',
     chatGeneral: "", 
-    errgoLogic: "--- Err and Log Output --- " + lineBreak + lineBreak,
     awsS3Key: "",
-    session: "",
     clientIP: "",
+    errgoLogic: "--- Err and Log Output --- " + lineBreak + lineBreak,
     fruitbotwin:0,
     fruitbotloss:0,
-    fruitbottie:0
+    fruitbottie:0,
+    googleApiKey: process.env.GOOGLE_API_KEY || 'aSecretToEverybody',
+    session: "",
+    userName: "Login"
 };
-
 // PostGre SQL stuff.
 const client = new Client({
   connectionString: process.env.DATABASE_URL,
@@ -130,22 +128,6 @@ var $rootPage = "root"
 var $publicBucket = "gilpublic";
 var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
-//}
-
-//{ settingsVar vars
-$settingsVar.userName= "null";
-$settingsVar.deviceType= "null";
-$settingsVar.apiVersion= $ver;
-$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY || 'aSecretToEverybody';
-$settingsVar.aclTable= [];
-$settingsVar.chatGeneral= "";
-$settingsVar.errgoLogic= "--- Err and Log Output --- " + lineBreak + lineBreak;
-$settingsVar.awsS3Key= "";
-$settingsVar.session= "";
-$settingsVar.clientIP= "";
-$settingsVar.fruitbotwin=0;
-$settingsVar.fruitbotloss=0;
-$settingsVar.fruitbottie=0;
 //}
 
 //{ app init
@@ -324,7 +306,7 @@ app.post('/login', function(request, response) {
     var $userName = request.query.username;
     var $enteredPassword = request.query.password;
 	addErr(("Login for user: " + $userName));
-	
+
 	if ($userPWHTable[$userName]) {
 		$pwhash = $userPWHTable[$userName];
 		addErr(("User found: " + $userName));
