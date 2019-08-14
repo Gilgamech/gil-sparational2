@@ -1,9 +1,9 @@
-//Gil.JS
+// index.JS
 // Comments are fundamental
 // aSecretToEverybody
 
 //{ Init vars
-var $ver = 343
+var $ver = 400
 var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -61,10 +61,11 @@ try {
 $settingsVar = {
     apiVersion: $ver, 
     deviceType: "null",
+	basePrice : Math.random(1.25,9),
     chatGeneral: "", 
     awsS3Key: "",
     clientIP: "",
-    errgoLogic: "--- Err and Log Output --- " + lineBreak + lineBreak,
+    errgoLogic: "--- Err and Log Output --- ",
     fruitbotwin:0,
     fruitbotloss:0,
     fruitbottie:0,
@@ -79,7 +80,7 @@ const client = new Client({
 });
 client.connect();
 client.query('SELECT table_name FROM information_schema.tables;', (err, queryOutput) => {
-  $settingsVar.chatGeneral = $settingsVar.chatGeneral + "Connected successfully to server" + lineBreak;
+  $settingsVar.chatGeneral += "Connected successfully to server";
   if (err) addErr((err));
   addErr(("Connected successfully to DB server"));
   // for (let row of queryOutput.rows) {
@@ -122,9 +123,6 @@ try {
 }	catch(e){console.log(e)};
 });// end s3 getObject
 
-var lineBreak = "\r\n"
-var $basePrice = (Math.random()*10)
-var $rootPage = "root"
 var $publicBucket = "gilpublic";
 var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
@@ -132,8 +130,8 @@ var $publicParams = {Bucket: $publicBucket};
 
 //{ app init
 app.use(cookieParser(process.env.PASSPORT_SECRET || 'aSecretToEverybody'));
-app.use(session());
-app.use(require('express-session')({
+app.use(bodyParser.urlencoded({ extended: true }));// get information from html forms
+app.use(session({
 	secret: process.env.PASSPORT_SECRET || 'aSecretToEverybody', 
 	resave: true, 
 	saveUninitialized: true, 
@@ -145,8 +143,6 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({ extended: true }));// get information from html forms
-app.use(cookieParser());// read cookies (needed for auth)
 //}
 
 //{ Functions
@@ -168,7 +164,7 @@ function taskScheduler() {
  };
 
 function addErr(err) {
-  $settingsVar.errgoLogic += err + "<br>"// lineBreak
+  $settingsVar.errgoLogic += err + "<br>"
 };
 
 function newSite($userName) {
@@ -277,7 +273,7 @@ app.get(/\S+/, function(request, response) {
 	var $directoryPath = $requestPath
 	var $pagename
 	if ($requestPath == "/") {
-		$requestPath += $rootPage
+		$requestPath = "/root"
 	};//end if siteName
 	if ($requestPath.indexOf("ipynb") > -1 ) {
 		$pagename = $requestPath;
