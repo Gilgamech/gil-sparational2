@@ -270,14 +270,11 @@ app.get(/\S+/, function(request, response) {
 		$requestPath = "/root"
 	};//end if siteName
 	var $directoryPath = $requestPath
-	var $pagename
 	if ($requestPath.indexOf("ipynb") > -1 ) {
-		$pagename = $requestPath;
 		$pageSettingsJson = JSON.stringify(request.query);
 		console.log($pageSettingsJson);
 	} else {
-		$pagename = $requestPath + '.spa';
-		$pageSettingsJson = $siteBase + $requestPath + $pagename;
+		$pageSettingsJson = $siteBase + $requestPath + $requestPath + '.spa';
 	};//end if requestPath.indexOf
 	$siteVar.userACLTable = [];
    if($userName){
