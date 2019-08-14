@@ -314,15 +314,15 @@ app.post('/login', function(request, response) {
 					request.session.userName = $userName;
 					console.log(request.session.userName);
 					
-					$settingsVar.userName = request.session.userName;
-					$settingsVar.clientIP = request.ip;
-					$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY;
-					response.json($settingsVar);
+					$siteVar.userName = request.session.userName;
+					$siteVar.clientIP = request.ip;
+					$siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
+					response.json($siteVar);
 
 					request.session.userName = "";
-					$settingsVar.userName = "";
-					$settingsVar.clientIP = "";
-					$settingsVar.googleApiKey= "";
+					$siteVar.userName = "";
+					$siteVar.clientIP = "";
+					$siteVar.googleApiKey= "";
 				})
 			} else {
 				addErr(("User password not match: " + $userName));
