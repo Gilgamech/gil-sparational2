@@ -5,7 +5,7 @@
 //{ Init vars
 var $ver = 400
 var sparational = require("sparational");
-sparational.sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
+sparational.sequelize = new sparational.Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
