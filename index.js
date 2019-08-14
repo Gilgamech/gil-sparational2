@@ -279,11 +279,12 @@ app.get(/\S+/, function(request, response) {
 		$pagename = $requestPath + '.spa';
 		$pageSettingsJson = $siteBase + $requestPath + $pagename;
 	};//end if requestPath.indexOf
+	$settingsVar.userACLTable = [];
    if($userName){
-		$settingsVar.userACLTable = [];
-		for ($site in $aclTable.users[$userName].userSites) {$settingsVar.userACLTable += $site+","}
+		for ($site in $aclTable.users[$userName].userSites) {
+			$settingsVar.userACLTable += $site+","
+		}
 	}else{
-		$settingsVar.userACLTable = [];
 	}// end if userName
 	$settingsVar.clientIP = request.ip;
 	$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY;
