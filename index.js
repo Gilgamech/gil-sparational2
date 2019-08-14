@@ -40,7 +40,7 @@ $s3.createBucket($privateParams);
 
 var $userPWHTable;
 var $pageSettingsJson;
-var $siteVar;
+var sparational.siteVar;
 var $aclTable;
 
 var $urlPWHParams = {
@@ -58,7 +58,7 @@ try {
 }	catch(e){console.log(e)};
 });// end s3 getObject
 
-$siteVar = {
+sparational.siteVar = {
     apiVersion: $ver, 
     deviceType: "null",
 	basePrice : Math.random(1.25,9),
@@ -80,13 +80,13 @@ const client = new Client({
 });
 client.connect();
 client.query('SELECT table_name FROM information_schema.tables;', (err, queryOutput) => {
-  $siteVar.chatGeneral += "Connected successfully to server";
+  sparational.siteVar.chatGeneral += "Connected successfully to server";
   if (err) addErr((err));
   addErr(("Connected successfully to DB server"));
 });
 
 User.findAll().then(users => {
-  $siteVar.chatGeneral = $siteVar.chatGeneral + 'SELECT FROM Users\n\r';
+  sparational.siteVar.chatGeneral = sparational.siteVar.chatGeneral + 'SELECT FROM Users\n\r';
   addErr((users));
 });
 
@@ -97,8 +97,8 @@ var $serverParams = {
 $s3.getObject($serverParams, function(err, dataStream){
 try {
 	
-	$siteVar = JSON.parse(dataStream.Body.toString('utf-8'));
-	addErr(JSON.stringify($siteVar));
+	sparational.siteVar = JSON.parse(dataStream.Body.toString('utf-8'));
+	addErr(JSON.stringify(sparational.siteVar));
 	if (err) {
 		addErr(err);
 	};// end if err
@@ -124,7 +124,7 @@ $s3.getSignedUrl('getObject', $urlPWHParams, function(err, url){
     addErr('the url is ' + url);
 });
 var $publicBucket = "gilpublic";
-var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
+sparational.siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
 //}
 
@@ -160,7 +160,7 @@ function taskScheduler() {
  };
 
 function addErr(err) {
-  $siteVar.errgoLogic += err + "<br>"
+  sparational.siteVar.errgoLogic += err + "<br>"
 };
 
 function newSite($userName) {
@@ -274,20 +274,20 @@ app.get(/\S+/, function(request, response) {
 		$pageSettingsJson = JSON.stringify(request.query);
 		console.log($pageSettingsJson);
 	} else {
-		$pageSettingsJson = $siteBase + $requestPath + $requestPath + '.spa';
+		$pageSettingsJson = sparational.siteBase + $requestPath + $requestPath + '.spa';
 	};//end if requestPath.indexOf
-	$siteVar.userACLTable = [];
+	sparational.siteVar.userACLTable = [];
    if($userName){
 		for ($site in $aclTable.users[$userName].userSites) {
-			$siteVar.userACLTable += $site+","
+			sparational.siteVar.userACLTable += $site+","
 		}
 	}else{
 	}// end if userName
-	$siteVar.clientIP = request.ip;
-	$siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
+	sparational.siteVar.clientIP = request.ip;
+	sparational.siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
 	addErr(("Page load "+$requestPath+" for user: " + $userName));
 
-	response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + $siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + $siteBase + '/Gilgamech.js"></script><script>$siteVar='+JSON.stringify($siteVar)+'</script> ');
+	response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + sparational.siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + sparational.siteBase + '/Gilgamech.js"></script><script>sparational.siteVar='+JSON.stringify(sparational.siteVar)+'</script> ');
 });
 //}
 
@@ -311,15 +311,15 @@ app.post('/login', function(request, response) {
 					request.session.userName = $userName;
 					console.log(request.session.userName);
 					
-					$siteVar.userName = request.session.userName;
-					$siteVar.clientIP = request.ip;
-					$siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
-					response.json($siteVar);
+					sparational.siteVar.userName = request.session.userName;
+					sparational.siteVar.clientIP = request.ip;
+					sparational.siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
+					response.json(sparational.siteVar);
 
 					request.session.userName = "";
-					$siteVar.userName = "";
-					$siteVar.clientIP = "";
-					$siteVar.googleApiKey= "";
+					sparational.siteVar.userName = "";
+					sparational.siteVar.clientIP = "";
+					sparational.siteVar.googleApiKey= "";
 				})
 			} else {
 				addErr(("User password not match: " + $userName));
