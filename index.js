@@ -6,7 +6,6 @@
 var $ver = 400
 var sparational = require("sparational");
 sparational.sequelize = new sparational.Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
-sparational.importDB();
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -287,11 +286,7 @@ app.get(/\S+/, function(request, response) {
 	sparational.siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
 	addErr(("Page load "+$requestPath+" for user: " + $userName));
 
-	var $requestPath = $requestPath.slice(1, $requestPath.length -0)
-	sparational.html($requestPath,function($callback) {
-		response.end($callback);
-	});
-
+    response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + sparational.siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + sparational.siteBase + '/Gilgamech.js"></script><script>sparational.siteVar='+JSON.stringify(sparational.siteVar)+'</script> ');
 });
 //}
 
