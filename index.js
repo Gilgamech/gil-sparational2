@@ -83,9 +83,6 @@ client.query('SELECT table_name FROM information_schema.tables;', (err, queryOut
   $settingsVar.chatGeneral += "Connected successfully to server";
   if (err) addErr((err));
   addErr(("Connected successfully to DB server"));
-  // for (let row of queryOutput.rows) {
-    // addErr((row.table_name));
-  // }
 });
 
 User.findAll().then(users => {
@@ -123,6 +120,9 @@ try {
 }	catch(e){console.log(e)};
 });// end s3 getObject
 
+$s3.getSignedUrl('getObject', $urlPWHParams, function(err, url){
+    addErr('the url is ' + url);
+});
 var $publicBucket = "gilpublic";
 var $siteBase = "https://s3.amazonaws.com/" + $publicBucket;
 var $publicParams = {Bucket: $publicBucket};
@@ -146,10 +146,6 @@ app.set('view engine', 'ejs');
 //}
 
 //{ Functions
-$s3.getSignedUrl('getObject', $urlPWHParams, function(err, url){
-    addErr('the url is ' + url);
-});
-
 function getBadPW() {
 	return Math.random().toString(36).slice(-20);
  }
@@ -270,11 +266,11 @@ app.get(/\S+/, function(request, response) {
 	//https://gil-api.herokuapp.com/?p=giltech
 	var $userName = request.session.userName;
 	var $requestPath = request.path
-	var $directoryPath = $requestPath
-	var $pagename
 	if ($requestPath == "/") {
 		$requestPath = "/root"
 	};//end if siteName
+	var $directoryPath = $requestPath
+	var $pagename
 	if ($requestPath.indexOf("ipynb") > -1 ) {
 		$pagename = $requestPath;
 		$pageSettingsJson = JSON.stringify(request.query);
@@ -441,6 +437,26 @@ app.post('/chat', function(req, res){
 });
 
 app.post('/test', function(req, res){
+   if(req.session.page_views){
+      req.session.page_views++;
+      res.send("Hi " + req.session.userName+ ", You visited this page " + req.session.page_views + " times");
+   } else {
+      req.session.page_views = 1;
+      res.send("Welcome to this page for the first time, "+req.session.userName+"!");
+   }
+});
+
+app.post('/FakeCoin', function(req, res){
+   if(req.session.page_views){
+      req.session.page_views++;
+      res.send("Hi " + req.session.userName+ ", You visited this page " + req.session.page_views + " times");
+   } else {
+      req.session.page_views = 1;
+      res.send("Welcome to this page for the first time, "+req.session.userName+"!");
+   }
+});
+
+app.post('/WorldHistory', function(req, res){
    if(req.session.page_views){
       req.session.page_views++;
       res.send("Hi " + req.session.userName+ ", You visited this page " + req.session.page_views + " times");
