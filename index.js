@@ -40,7 +40,7 @@ $s3.createBucket($privateParams);
 
 var $userPWHTable;
 var $pageSettingsJson;
-var $settingsVar;
+var $siteVar;
 var $aclTable;
 
 var $urlPWHParams = {
@@ -58,7 +58,7 @@ try {
 }	catch(e){console.log(e)};
 });// end s3 getObject
 
-$settingsVar = {
+$siteVar = {
     apiVersion: $ver, 
     deviceType: "null",
 	basePrice : Math.random(1.25,9),
@@ -80,13 +80,13 @@ const client = new Client({
 });
 client.connect();
 client.query('SELECT table_name FROM information_schema.tables;', (err, queryOutput) => {
-  $settingsVar.chatGeneral += "Connected successfully to server";
+  $siteVar.chatGeneral += "Connected successfully to server";
   if (err) addErr((err));
   addErr(("Connected successfully to DB server"));
 });
 
 User.findAll().then(users => {
-  $settingsVar.chatGeneral = $settingsVar.chatGeneral + 'SELECT FROM Users\n\r';
+  $siteVar.chatGeneral = $siteVar.chatGeneral + 'SELECT FROM Users\n\r';
   addErr((users));
 });
 
@@ -97,8 +97,8 @@ var $serverParams = {
 $s3.getObject($serverParams, function(err, dataStream){
 try {
 	
-	$settingsVar = JSON.parse(dataStream.Body.toString('utf-8'));
-	addErr(JSON.stringify($settingsVar));
+	$siteVar = JSON.parse(dataStream.Body.toString('utf-8'));
+	addErr(JSON.stringify($siteVar));
 	if (err) {
 		addErr(err);
 	};// end if err
@@ -160,7 +160,7 @@ function taskScheduler() {
  };
 
 function addErr(err) {
-  $settingsVar.errgoLogic += err + "<br>"
+  $siteVar.errgoLogic += err + "<br>"
 };
 
 function newSite($userName) {
@@ -279,18 +279,18 @@ app.get(/\S+/, function(request, response) {
 		$pagename = $requestPath + '.spa';
 		$pageSettingsJson = $siteBase + $requestPath + $pagename;
 	};//end if requestPath.indexOf
-	$settingsVar.userACLTable = [];
+	$siteVar.userACLTable = [];
    if($userName){
 		for ($site in $aclTable.users[$userName].userSites) {
-			$settingsVar.userACLTable += $site+","
+			$siteVar.userACLTable += $site+","
 		}
 	}else{
 	}// end if userName
-	$settingsVar.clientIP = request.ip;
-	$settingsVar.googleApiKey= process.env.GOOGLE_API_KEY;
+	$siteVar.clientIP = request.ip;
+	$siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
 	addErr(("Page load "+$requestPath+" for user: " + $userName));
 
-	response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + $siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + $siteBase + '/Gilgamech.js"></script><script>$settingsVar='+JSON.stringify($settingsVar)+'</script> ');
+	response.send('<!DOCTYPE html><html lang="en"><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="shortcut icon" href="' + $siteBase + '/favicon.ico" type="image/x-icon"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><div id="deleteme" hidden><p1>Page requires Javascript and load files (XHR) to function.</p1><br><p3>This page composes itself entirely from Javascript -  a true single-page application, not only is it entirely one page in the browser. Where most websites use HTML for structure, CSS for style, and Javascript for operations, this page uses JSON to express every element. This uses a small (less than 500 lines) Javascript engine to interpret the JSON. To see this in action, please permit the site to run Javascript, and load files from the data source: </p3><br><div id="pageSettingsJson" >' + $pageSettingsJson + '</div></div></body></html><script src="' + $siteBase + '/Gilgamech.js"></script><script>$siteVar='+JSON.stringify($siteVar)+'</script> ');
 });
 //}
 
