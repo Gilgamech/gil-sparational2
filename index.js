@@ -40,7 +40,6 @@ $s3.createBucket($privateParams);
 
 var $userPWHTable;
 var $pageSettingsJson;
-var sparational.siteVar;
 var $aclTable;
 
 var $urlPWHParams = {
