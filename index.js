@@ -4,8 +4,8 @@
 
 //{ Init vars
 var $ver = 400
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
+var sparational = require("sparational");
+sparational.sequelize = new Sequelize(process.env.DATABASE_URL || 'postgres://dbuser:dbpasswd@dbhost:5432/dbname');
 var express = require('express');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -19,7 +19,7 @@ var pg = require('pg').native;
 var pghstore = require('pg-hstore');
 
 var app = express();
-var User = sequelize.import('./User');
+var User = sparational.sequelize.import('./User');
 User.sync();
 
 var $privateBucket = "gilprivate";
