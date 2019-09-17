@@ -15,6 +15,10 @@ var $AWS = require('aws-sdk');
 var stripe = require("stripe")(process.env.STRIPE_KEY || 'sk_test_abcdef1234567890');
 const { Client } = require('pg');
 
+var $basePrice = Math.random()*10
+var $chatChannel = [];
+var $chatMessage = [];
+
 var pg = require('pg').native;
 var pghstore = require('pg-hstore');
 
@@ -293,7 +297,7 @@ app.get(/\S+/, function(request, response) {
 });
 //}
 
-//{POST calls 
+//{ POST calls 
 app.post('/login', function(request, response) {
     var $userName = request.query.username;
     var $enteredPassword = request.query.password;
@@ -403,6 +407,24 @@ app.post('/s3upload', function(request, response){
    }
 });
 
+app.post('/upload', function(request, response){
+	var $elements = request.query.elements
+	$elements = $elements.replace(/~~/g,"#")
+	$elements = JSON.parse($elements)
+	console.log('elements: '); 
+	console.log($elements); 
+	//if(request.session.userName){
+	sparational.sequelize.query("INSERT INTO Pages (pageName, pageTitle, pageDesc, elements) SELECT '"+$elements.pageName+"','"+$elements.pageTitle+"','"+$elements.pageDesc+"','"+JSON.stringify($elements)+"'").then(([$PagesResults, metadata]) => {
+response.send(JSON.stringify(metadata))
+	}).catch(function(err) {
+		console.log('Pages error: '); 
+		console.log(err); 
+response.send(JSON.stringify(err))
+	});//end Pages query
+	// } else {
+	// }
+
+});
 app.post('/s3url', function(request, response){
 	var $userName = request.session.userName;
 	console.log("Existing site: " + $userName);
@@ -488,3 +510,4 @@ app.use(function(req, res, next) {
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
+
