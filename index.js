@@ -272,13 +272,6 @@ app.get(/\S+/, function(request, response) {
 	if ($requestPath == "/") {
 		$requestPath = "/root"
 	};//end if siteName
-	var $directoryPath = $requestPath
-	if ($requestPath.indexOf("ipynb") > -1 ) {
-		$pageSettingsJson = JSON.stringify(request.query);
-		console.log($pageSettingsJson);
-	} else {
-		$pageSettingsJson = sparational.siteBase + $requestPath + $requestPath + '.spa';
-	};//end if requestPath.indexOf
 	sparational.siteVar.userACLTable = [];
    if($userName){
 		for ($site in $aclTable.users[$userName].userSites) {
