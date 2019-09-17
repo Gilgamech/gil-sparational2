@@ -405,7 +405,7 @@ app.post('/upload', function(request, response){
 	$elements = JSON.parse($elements)
 	console.log('elements: '); 
 	console.log($elements); 
-	//if(request.session.userName){
+	if(request.session.userName){
 	sparational.sequelize.query("INSERT INTO Pages (pageName, pageTitle, pageDesc, elements) SELECT '"+$elements.pageName+"','"+$elements.pageTitle+"','"+$elements.pageDesc+"','"+JSON.stringify($elements)+"'").then(([$PagesResults, metadata]) => {
 response.send(JSON.stringify(metadata))
 	}).catch(function(err) {
@@ -414,7 +414,7 @@ response.send(JSON.stringify(metadata))
 response.send(JSON.stringify(err))
 	});//end Pages query
 	// } else {
-	// }
+	 }
 
 });
 app.post('/s3url', function(request, response){
