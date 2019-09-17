@@ -268,9 +268,9 @@ function sendS3Url($userName,$siteName,$fileName,$callback,$contentType) {
 app.get(/\S+/, function(request, response) {
 	//https://gil-api.herokuapp.com/?p=giltech
 	var $userName = request.session.userName;
-	var $requestPath = request.path
-	if ($requestPath == "/") {
-		$requestPath = "/root"
+	var $pagename = request.get('host')
+	if ($pagename == "localhost:5000") {
+		$pagename = "www.sparational.com"
 	};//end if siteName
 	sparational.siteVar.userACLTable = [];
    if($userName){
@@ -281,10 +281,9 @@ app.get(/\S+/, function(request, response) {
 	}// end if userName
 	sparational.siteVar.clientIP = request.ip;
 	sparational.siteVar.googleApiKey= process.env.GOOGLE_API_KEY;
-	addErr(("Page load "+$requestPath+" for user: " + $userName));
 
-	var $requestPath = $requestPath.slice(1, $requestPath.length -0)
-	sparational.html($requestPath,function($callback) {
+	sparational.html($pagename,function($callback) {
+		addErr(("Page load "+$pagename+" for user: " + $userName));
 		response.end($callback);
 	});
 });
